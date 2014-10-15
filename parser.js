@@ -122,7 +122,7 @@ case 7: this.$ = {
 break;
 case 8: this.$ = {
 		fn: function(x) { return -x; },
-		args: [$$[$0-1], $$[$01]],
+		args: [$$[$0]],
 		loc: yy.toLoc(this._$)
 	}; 
 break;

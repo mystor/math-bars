@@ -40,7 +40,7 @@ function evaluate(ast) {
   return evaled;
 }
 
-var charWidth = 16;
+var charWidth = 15.5;
 var fullHeight = 50;
 var colors = [
   'rgba(255, 0, 0, 0.5)',
@@ -55,12 +55,12 @@ var colors = [
 //   loc: {start, end}
 // }
 function drawBars(ctx, evaled, i, state) {
-  ctx.fillStyle = colors[i];
+  ctx.fillStyle = colors[i % colors.length];
   var logVal = Math.log10(Math.abs(evaled.val) + 1);
   ctx.fillRect(
-    evaled.loc.start * charWidth + i + 2,
+    evaled.loc.start * charWidth  + 2,
     Math.min((-Math.sign(evaled.val) * logVal * state.scale) + fullHeight/2, fullHeight/2),
-    (evaled.loc.end - evaled.loc.start) * charWidth - 2*i,
+    (evaled.loc.end - evaled.loc.start) * charWidth,
     Math.abs(logVal) * state.scale | 0
   );
 

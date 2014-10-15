@@ -69,7 +69,7 @@ expr
 	}; }
     | '-' expr %prec UMINUS { $$ = {
 		fn: function(x) { return -x; },
-		args: [$1, $3],
+		args: [$2],
 		loc: yy.toLoc(@0)
 	}; }
     | '(' expr ')' { $$ = $2; }
