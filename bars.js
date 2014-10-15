@@ -40,9 +40,13 @@ function evaluate(ast) {
   return evaled;
 }
 
-var charWidth = 8;
-var fullHeight = 30;
-var colors = ['#ff0000', '#00ff00', '#0000ff'];
+var charWidth = 16;
+var fullHeight = 50;
+var colors = [
+  'rgba(255, 0, 0, 0.5)',
+  'rgba(0, 255, 0, 0.5)',
+  'rgba(0, 0, 255, 0.5)'
+];
 // Generate the bars
 // {
 //   fn: function(...) {...},
@@ -52,11 +56,12 @@ var colors = ['#ff0000', '#00ff00', '#0000ff'];
 // }
 function drawBars(ctx, evaled, i, state) {
   ctx.fillStyle = colors[i];
+  var logVal = Math.log10(Math.abs(evaled.val) + 1);
   ctx.fillRect(
     evaled.loc.start * charWidth + i + 2,
-    Math.min((-evaled.val + state.offset) * state.scale, state.offset * state.scale),
+    Math.min((-Math.sign(evaled.val) * logVal * state.scale) + fullHeight/2, fullHeight/2),
     (evaled.loc.end - evaled.loc.start) * charWidth - 2*i,
-    Math.abs(evaled.val) * state.scale
+    Math.abs(logVal) * state.scale | 0
   );
 
   evaled.args.forEach(function(arg) {
@@ -67,19 +72,19 @@ function drawBars(ctx, evaled, i, state) {
 function drawAllBars(canvas, evaled) {
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var offset = Math.max(Math.abs(evaled.min), Math.abs(evaled.max));
   var state = {
-    offset: offset,
-    scale: fullHeight/(2*offset)
+    scale: (fullHeight/2)/Math.log10(100)
   };
+  console.log(state);
   var i = 0;
-  drawBars(ctx, evaled, i, state);
 
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
   ctx.fillRect(
     0,
-    state.offset * state.scale - 1,
+    fullHeight/2 - 1,
     (evaled.loc.end - evaled.loc.start) * charWidth + 4,
-    2
+    1
   );
+
+  drawBars(ctx, evaled, i, state);
 }

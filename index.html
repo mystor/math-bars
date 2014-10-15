@@ -1,8 +1,29 @@
-<canvas id="canvas" width=50 height=30></canvas>
-<pre style="padding: 2px; margin: 0px;">1*3-5</pre>
+<canvas id="canvas" width=300 height=50></canvas>
+<pre id="show" style="font-size: 200%; padding: 2px; margin: 0px;">1*3-5</pre>
+
+<input type="text" id="formula">
+<button id="button">Update Formula</button>
 
 <script src="bars.js"></script>
+<script src="parser.js"></script>
 <script>
+parser.yy = {
+  toLoc: function(x) {
+    return {
+      start: x.first_column,
+      end: x.last_column
+    };
+  }
+};
+
+button.addEventListener('click', function(e) {
+  e.preventDefault();
+  show.textContent = formula.value;
+  ast = parser.parse(formula.value);
+
+  drawAllBars(canvas, evaluate(ast), 0);
+});
+
 var ast = {
   fn: function(a, b) {
     return a - b;
